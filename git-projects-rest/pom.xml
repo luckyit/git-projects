@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+		<groupId>pl.luckyit.test</groupId>
+		<artifactId>git-projects</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>git-projects-rest</artifactId>
+    <name>GIT PROJECTS REST</name>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>pl.luckyit.test</groupId>
+            <artifactId>git-projects-domain</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+    </dependencies>
+	
+	<profiles>
+        <profile>
+            <id>release-win</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>${maven-antrun-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>cleanup-files</id>
+                                <phase>clean</phase>
+                                <configuration>
+                                    <target>
+                                        <echo>Cleaning up release win folder...</echo>
+                                        <delete dir="${release-win-target-dir}"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>prepare-files</id>
+                                <phase>prepare-package</phase>
+                                <configuration>
+                                    <target>
+                                        <echo>Prepare package...</echo>
+                                        <mkdir dir="${release-win-target-dir}"/>
+                                        <copy file="${users-file}" todir="${release-win-target-dir}"/>
+										<copy file="${readme-file}" todir="${release-win-target-dir}"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+							<execution>
+                                <id>prepare-installation</id>
+                                <phase>install</phase>
+                                <configuration>
+                                    <target>
+                                        <echo>Preparing installation zip file...</echo>
+                                        <mkdir dir="${packet-release-win-target-dir}"/>
+										<zip destfile="${packet-release-win-target-dir}/packet-${project.artifactId}-${project.version}.zip"
+                                            encoding="UTF-8" whenempty="create" basedir="${release-win-target-dir}" excludes="antrun,antrun/*.*"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<version>${spring.boot.maven.plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+							<configuration>
+								<outputDirectory>${release-win-target-dir}</outputDirectory>
+							</configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                </plugins>
+            </build>
+        </profile>
+		<profile>
+            <id>dev</id>
+			<activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<version>${spring.boot.maven.plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<goal>compile</goal>
+					<source>${java.source}</source>
+					<target>${java.target}</target>
+					<encoding>${build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+    </build>
+	
+	<properties>
+        <release-win-target-dir>${project.build.directory}/release-win</release-win-target-dir>
+		<packet-release-win-target-dir>${project.build.directory}/packet-release-win</packet-release-win-target-dir>
+		<resources-dir>${basedir}/packet-resources</resources-dir>
+		<users-file>${resources-dir}/users.yml</users-file>
+		<readme-file>${resources-dir}/readme.txt</readme-file>
+    </properties>
+	
+</project>

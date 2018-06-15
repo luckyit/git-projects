@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>pl.luckyit.test</groupId>
+    <artifactId>git-projects</artifactId>
+    <name>GIT PROJECTS</name>
+    <version>1.0.0</version>
+
+    <packaging>pom</packaging>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.simple.version}</version>
+        </dependency>
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+			<version>${spring.boot.version}</version>
+        </dependency>
+    </dependencies>
+	
+	<modules>
+		<module>git-projects-domain</module>
+		<module>git-projects-rest</module>
+	</modules>
+
+    <properties>
+		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
+		<maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
+		<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+        <java.source>1.8</java.source>
+        <java.target>1.8</java.target>
+        <build.sourceEncoding>UTF-8</build.sourceEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring.boot.version>2.0.0.RELEASE</spring.boot.version>
+        <spring.boot.dependencies.version>2.0.0.RELEASE</spring.boot.dependencies.version>
+        <spring.boot.maven.plugin.version>2.0.0.RELEASE</spring.boot.maven.plugin.version>
+        <slf4j.simple.version>1.7.25</slf4j.simple.version>
+    </properties>
+</project>

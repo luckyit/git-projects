@@ -1,0 +1,1 @@
+copy the users.yml file to the directory [user.home]/git-projects/conf
